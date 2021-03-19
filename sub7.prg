@@ -1,0 +1,48 @@
+* SISTEMA.....: FUNCIONARIOS
+* MODULO......: SUB7.PRG - FUNCIONARIOS
+* DATA INICIO.: 20/04/2000
+* AUTOR.......: ALEXSANDER SALINAS SANTOS - salinas@querove.com.br
+* EMPRESA.....: SP SYSTEM PLACE INFORMATICA LTDA
+
+* CONFIGURA€åES
+
+CLOSE ALL
+SET COLOR TO
+SET SCORE OFF
+SET TALK OFF
+SET WRAP ON
+SET DATE BRIT
+SET CONSOLE OFF
+
+DO WHILE .T.
+
+SET COLOR TO N+/N
+   @ 06,33,10,57 BOX REPL(CHR(176),9)
+   SET COLOR TO R/B
+   @ 05,31 SAY REPL(CHR(196),25)
+   @ 09,31 SAY REPL(CHR(196),25)
+   SET COLOR TO GR+/B
+   @ 05,32 SAY " FUNCIONARIOS "
+   AG=0
+   SET COLOR TO W/B,R/W
+   @ 06,31 SAY " ³"
+   @ 07,31 SAY " ³"
+   @ 08,31 SAY " ³"
+   @ 06,33 PROMPT "A - BANCO DE DADOS     "
+   @ 07,33 PROMPT "B - CONSULTAS          "
+   @ 08,33 PROMPT "C - ****************** "
+      SUB6=SAVESCREEN(00,00,24,80)
+      MENU TO AG
+      DO CASE
+         CASE AG=0
+            RESTSCREEN(00,00,24,80,JLTELA)
+            RETURN
+         CASE AG=1
+               DO FUNI1
+         CASE AG=2
+          *     DO SUB72
+         CASE AG=3
+          *     DO SUB73
+      ENDCASE
+ENDDO
+

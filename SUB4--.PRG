@@ -1,0 +1,49 @@
+* SISTEMA.....: CONTROLE E NOTA FISCAL
+* MODULO......: SUB4.PRG - SUBMENU DE NOTA FISCAL
+* DATA INICIO.: 18/10/1999
+* AUTOR.......: ALEXSANDER SALINAS SANTOS
+* EMPRESA.....: SP SYSTEM PLACE INFORMATICA LTDA
+
+* CONFIGURA€åES
+
+CLOSE ALL
+SET COLOR TO
+SET SCORE OFF
+SET TALK OFF
+SET WRAP ON
+SET DATE BRIT
+SET CONSOLE OFF
+
+DO WHILE .T.
+
+JLTELA=SAVESCREEN(00,00,24,80)
+
+SET COLOR TO N+/N
+   @ 06,33,10,57 BOX REPL(CHR(176),9)
+   SET COLOR TO R/B
+   @ 05,31 SAY REPL(CHR(196),25)
+   @ 09,31 SAY REPL(CHR(196),25)
+   SET COLOR TO GR+/B
+   @ 05,32 SAY " SUBMENU NOTA FISCAL "
+   AG=0
+   SET COLOR TO W/B,R/W
+   @ 06,31 SAY " ³"
+   @ 07,31 SAY " ³"
+   @ 08,31 SAY " ³"
+   @ 06,33 PROMPT "A - Notas Fiscal       "
+   @ 07,33 PROMPT "B - Impressao          "
+   @ 08,33 PROMPT "C - Consultas          "
+      MENU TO AG
+      DO CASE
+         CASE AG=0
+            RESTSCREEN(00,00,24,80,JLTELA)
+            RETURN
+         CASE AG=1
+                DO SUB40
+         CASE AG=2
+                DO SUB42
+         CASE AG=3
+                DO SUB41
+      ENDCASE
+ENDDO
+

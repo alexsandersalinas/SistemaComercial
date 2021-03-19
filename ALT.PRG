@@ -1,0 +1,248 @@
+* SISTEMA.....: CONTROLE E CADASTRO DE ALUNOS
+* MODULO......: AGaltalu.PRG - ALTERACAO DE ALUNOS
+* DATA INICIO.: 12/01/1999
+* AUTOR.......: DANILO F. MAZZULLI
+* EMPRESA.....: AGUIAS DE OURO - ACADEMIA
+
+
+* CONFIGURA€åES
+
+CLOSE ALL
+SET COLOR TO
+SET SCORE OFF
+SET TALK OFF
+SET WRAP ON
+SET DATE BRIT
+SET CONSOLE OFF
+SET KEY -1 TO AGCONALAACHOICE
+
+JLTELASOL=SAVESCREEN(00,00,24,80)
+
+
+DO WHILE .T.
+
+   SELE 1
+   USE AGUIADBF ALIAS CAD
+   INDEX ON NOME TO AGUIAALT
+   GOTO TOP
+
+
+* TELA
+
+   TELAALT()
+
+
+* GETS
+
+   AGNOME=SPACE(40)
+
+   @ 07,10 GET AGNOME PICT "@!" VALID ! EMPTY(AGNOME)
+   READ
+
+      IF LASTKEY()=27
+         SET KEY -1 TO
+         CLOSE ALL
+         RESTSCREEN(00,00,24,80,JLTELASOL)
+         RETURN
+      ENDIF
+
+        SELE CAD
+        LOCATE FOR NOME=AGNOME
+        IF .NOT. FOUND()
+           JLMENS=SAVESCREEN(00,00,24,80)
+           SET COLOR TO W+/R
+           @ 23,01 CLEAR TO 23,78
+           @ 23,02 Say "Nome de Aluno nao encontrado.  Favor consultar <F2>... "
+           INKEY(2)
+           RESTSCREEN(00,00,24,80,JLMENS)
+           LOOP
+        ENDIF
+
+   AGEND   =ENDERECO
+   AGNUM   =NUMERO
+   AGBAIRRO=BAIRRO
+   AGCID   =CIDADE
+   AGCEP   =CEP
+   AGTELR  =TELRES
+   AGTELC  =TELCOM
+   AGRG    =RG
+   AGCIC   =CIC
+   AGDTNASC=DATANASC
+   AGCURSO =CURSO
+   AGVRMENS=VALORMENS
+   AGPLANOPG=PLANOPG
+   AGDTENTR=DATAENTRA
+   AGOBS   =OBSERVACAO
+
+   @ 08,14 GET AGEND        PICT "@!"              VALID ! EMPTY(AGEND)
+   @ 08,66 GET AGNUM        PICT "@!"              VALID ! EMPTY(AGNUM)
+   @ 09,12 GET AGBAIRRO     PICT "@!"              VALID ! EMPTY(AGBAIRRO)
+   @ 09,43 GET AGCID        PICT "@!"              VALID ! EMPTY(AGCID)
+   @ 10,09 GET AGCEP        PICT "99999-999"       VALID ! EMPTY(AGCEP)
+   @ 10,32 GET AGTELR       PICT "@!"             
+   @ 10,56 GET AGTELC       PICT "@!"             
+   @ 11,09 GET AGRG         PICT "99.999.999-9"    VALID ! EMPTY(AGRG)
+   @ 11,50 GET AGCIC        PICT "999.999.999-99"  VALID ! EMPTY(AGCIC)
+   @ 12,21 GET AGDTNASC     PICT "99/99/9999"      VALID ! EMPTY(AGDTNASC)
+   @ 13,14 GET AGCURSO      PICT "@!"              VALID ! EMPTY(AGCURSO)
+   @ 14,26 GET AGVRMENS     PICT "999,999.99"      VALID ! EMPTY(AGVRMENS)
+   @ 14,50 GET AGPLANOPG    PICT "@!"              
+   @ 15,20 GET AGDTENTR     PICT "99/99/9999"      VALID ! EMPTY(AGDTENTR)
+   @ 17,09 GET AGOBS        PICT "@!"              
+   READ
+
+   Grava="S"
+   JLGRAVA=SAVESCREEN(00,00,24,80)
+   SET COLOR TO W+/R
+   @ 23,01 CLEAR TO 23,78
+   @ 23,02 Say "Gravar Alteracao nos Dados (S/N)? " GET GRAVA PICT "@!";
+   VALID GRAVA $ "SN"
+   READ
+      
+     IF GRAVA = "N"
+        SET COLOR TO W/B,N/W
+        RESTSCREEN(00,00,24,80,JLGRAVA)
+        LOOP
+     ENDIF
+      
+           IF GRAVA = "S"
+              SELE CAD
+              REPL NOME       WITH    AGNOME  
+              REPL ENDERECO   WITH    AGEND
+              REPL NUMERO     WITH    AGNUM
+              REPL BAIRRO     WITH    AGBAIRRO
+              REPL CIDADE     WITH    AGCID
+              REPL CEP        WITH    AGCEP
+              REPL TELRES     WITH    AGTELR
+              REPL TELCOM     WITH    AGTELC
+              REPL RG         WITH    AGRG
+              REPL CIC        WITH    AGCIC
+              REPL DATANASC   WITH    AGDTNASC 
+              REPL CURSO      WITH    AGCURSO
+              REPL VALORMENS  WITH    AGVRMENS
+              REPL PLANOPG    WITH    AGPLANOPG
+              REPL DATAENTRA  WITH    AGDTENTR
+              REPL OBSERVACAO WITH    AGOBS 
+
+              SET COLOR TO W/B,N/W
+              RESTSCREEN(00,00,24,80,JLGRAVA)
+              LOOP
+      ENDIF
+
+ENDDO
+
+PROC AGALTCAD
+
+JLPROCON=SAVESCREEN(00,00,24,80)
+
+DO WHILE .T.
+
+   SELE 1
+   USE AGUIADBF ALIAS CAD
+   INDEX ON NOME TO AGUIAALT
+   GOTO TOP
+
+   SELE CAD
+
+   SET COLOR TO N+/B
+   @ 04,01,21,78 BOX REPL(CHR(177),9)
+   SET COLOR TO W+/R
+   @ 05,02 CLEAR TO 05,76
+   TITULO="Consulta de Alunos"
+   COL1=INT((40)-LEN(TITULO)/2)-1
+   @ 05,COL1 SAY TITULO
+   SET COLOR TO W+/B
+   @ 06,02 CLEAR TO 20,76
+
+   DECLARE CAMPO[2], PICTU[2], CABEC[2]
+   CAMPO[1] = "NOME"
+   CAMPO[2] = "ENDERECO"
+   PICTU[1] = "@!"
+   PICTU[2] = "@!"
+   CABEC[1] = "Nome dos Alunos"
+   CABEC[2] = "Enderecos"
+
+   DBEDIT(07,03,20,75,CAMPO,,PICTU,CABEC)
+
+   RESTSCREEN (00,00,24,80,JLPROCON)
+   RETURN
+ENDDO
+
+
+FUNCTION TELAALT
+
+SET COLOR TO N+/N
+@ 06,04,21,78 BOX REPL(CHR(177),9)
+SET COLOR TO W+/R
+@ 05,02 CLEAR TO 05,76
+TITULO="Alteracao de Alunos"
+COL1=INT((40)-LEN(TITULO)/2)-1
+@ 05,COL1 SAY TITULO
+SET COLOR TO GR+/R
+@ 05,03 SAY "F2 - Consulta"
+SET COLOR TO W/B
+@ 06,02 CLEAR TO 20,76
+
+@ 07,03 SAY "Nome.: "
+@ 08,03 SAY "Endereco.: "
+@ 08,57 SAY "Numero.: "
+@ 09,03 SAY "Bairro.: "
+@ 09,34 SAY "Cidade.: "
+@ 10,03 SAY "CEP.: "
+@ 10,22 SAY "Tel.Res.: "
+@ 10,46 SAY "Tel.Com.: "
+@ 11,03 SAY "R.G.: "
+@ 11,42 SAY "C.I.C.: "
+@ 12,03 SAY "Data Nascimento.: "
+@ 13,03 SAY "Curso(s).: "
+@ 14,03 SAY "Valor Mensalidade.: R$ "
+@ 14,42 SAY "Plano.: "
+@ 15,03 SAY "Data de Inicio.: "
+@ 17,03 SAY "Obs.: "
+
+
+PROC AGCONALAACHOICE
+
+   SET KEY -1 TO
+
+   SELE CAD
+   INDEX ON NOME TO AGUIADBF
+   GOTO TOP
+
+   SIT=SAVESCREEN(00,00,24,80)
+
+   SET COLOR TO N+/B
+   @ 04,01,21,78 BOX REPL(CHR(177),9)
+   SET COLOR TO W+/R
+   @ 05,02 CLEAR TO 05,76
+   TITULO="Consulta de Alunos"
+   COL1=INT((40)-LEN(TITULO)/2)-1
+   @ 05,COL1 SAY TITULO
+   SET COLOR TO W+/B
+   @ 06,02 CLEAR TO 20,76
+
+   DECLARE M3[50],M4[50]
+   FOR I = 1 TO 50
+      M3[I]=NOME
+      M4[I]=RECNO()
+      SKIP
+   NEXT
+
+   SET COLOR TO ,W/gR+
+   RESP=ACHOICE(06,02,20,76,M3)
+      IF RESP=0
+         RESTSCREEN(00,00,24,80,SIT)
+         RETURN
+      ENDIF
+
+   GOTO M4[RESP]
+
+   RESTSCREEN(00,00,24,80,SIT)
+   SET COLOR TO N/W
+   @ 07,15 SAY NOME
+   SET COLOR TO ,N/W
+   AGNOME=NOME
+
+SET KEY -1 TO AGCONALAACHOICE
+
+

@@ -1,0 +1,10 @@
+DO WHILE .T.
+*
+*
+*
+RESTORE SCREEN FROM CLSTELA
+ENDDO
+
+
+
+
